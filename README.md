@@ -16,3 +16,36 @@ Need some version of `Python3.9` in `$PythonPath` then use `pipenv` to install d
     cd src
     python eda.py
 ```
+
+
+# Modelling Thoughts
+
+1. **Baseline** (something simple to improve on - lagged inputs only)
+2. **Complex** (clearly exogeneous variables matter here, this is tricky though get to if time permits)
+
+### Features/Processing (initial thoughts):
+    1. Normalize (cases per 100k rather than total cases)
+    2. Missing Data
+        - mean
+        - same as last
+        - mode for categoric
+        - MICE
+    3. Standardize Timestamp Frequency
+        - Not a big deal but make every period start on same day
+        - Aggregate covariates appropriately
+    3. Features
+        - AutoRegressive (Lags)
+            - Quickly test a few simple AR Models (lagged observations clearly matter)
+        - Exogeneous
+            - Clearly lagged variables don't contain all the information (non-cyclical plot)
+            - This is a mosquito born virus and we're provided lots of NOAA data... 
+                - Rainfaill/Humidity and Temperature likely important
+                    - Linear Correlation is low (include plots)
+                - Perhaps order matters?
+                    - (i.e. mild winter followed by humid wet/hot season)
+                    - El Nino? (perhaps more foreseeable compared to humidity/temp)
+
+            - Including Exogeneous predictors is not easy in a time-series context
+                - forecasts will be required for each co-variate, so it's important to establish a baseline and demonstrate meaningfull improvement
+
+

@@ -9,6 +9,9 @@ pandas = "*"
 plotly = "*"
 scipy = "*"
 pandas-profiling = "*"
+statsmodels = "*"
+sklearn = "*"
+pmdarima = "*"
 
 [requires]
 python_version = "3.9"
