@@ -9,7 +9,10 @@ import statsmodels.api as sm
 from statsmodels.tsa.ar_model import AutoReg, ar_select_order
 
 # Custom Feature Processing
-from process import load_data, fill_missing_by_avg, fill_missing_by_last
+from process import load_data, fill_missing_by_last
+
+# Endogenous VAR/ARIMAX/SARIMAX
+# from statsmodels.tsa.api import VAR
 
 
 ###
@@ -34,10 +37,10 @@ y_train, y_val = df['total_cases'][0:cut_point], df['total_cases'][cut_point:]
 ### Simple Auto Regression:
 ###
 
-def train_and_view_ar(lags, save=False):
+def train_and_view_ar(lags, trend='n', save=False):
     """Train AutoRegression with specified Lags and view results
     """
-    model_ar = AutoReg(y_train, lags).fit(cov_type='HC0')
+    model_ar = AutoReg(y_train, lags, trend=trend).fit(cov_type='HC0')
     pred = model_ar.predict(start=len(y_train), end=len(y_train) + len(y_val) - 1)
 
     print(f'avg MAD: {np.abs(pred - y_val).mean()}')
@@ -53,27 +56,35 @@ def train_and_view_ar(lags, save=False):
 
 # Example of a very naive optimization
 
+# # check for trend (appears none or constant is best - somewhat obvious)
+# for trend in ['n', 'c', 't', 'ct']:
+#     for lags in range(1, 300, 50):
+#         model = AutoReg(y_train, lags, trend=trend).fit(cov_type='HC0')
+#         pred = model.predict(start=len(y_train), end=len(y_train) + len(y_val) - 1)
+#         print(f'Trend: {trend} AR terms: {lags} avgMAD: {np.abs(pred - y_val).mean():,.2f}')
+
+
 results = list()
 for lag in range(1, 350, 1):
-
-    model = AutoReg(y_train, lag).fit(cov_type='HC0')
+    model = AutoReg(y_train, lag, trend='n').fit(cov_type='HC0')
     pred = model.predict(start=len(y_train), end=len(y_train) + len(y_val) - 1)
 
-
     res_dict = {'AR_periods': int(lag),
+                # 'trend': trend,
                 'MAD': np.abs(pred - y_val).mean(),
                 'MD': (pred - y_val).mean()
-               }
+            }
     results.append(res_dict)
     if lag % 10 == 0:
         print(f'AR Periods: {lag}, MAD: {np.abs(pred - y_val).mean():,.2f}')
 
 dfr = pd.DataFrame(results)
-optimal_ar = dfr.loc[np.argmin(dfr.MAD)]['AR_periods']
+optimal_ar = int(dfr.loc[np.argmin(dfr.MAD)]['AR_periods'])
 
 print(f'Found optimal AR periods to be: {optimal_ar} resulting in MAD: {dfr.loc[optimal_ar].MAD:,.2f}')
 
 
 train_and_view_ar(1)
+train_and_view_ar(10)
 train_and_view_ar(100)
 train_and_view_ar(optimal_ar, save=True)
