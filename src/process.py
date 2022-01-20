@@ -44,20 +44,24 @@ def fill_missing_by_type(df):
         df[col] = df[col].fillna(df[col].shift(1))
 
 
-def fill_missing_by_avg(df):
-    """Fill Missing by Avg (except lag columns)
-    """
-    cols = [col for col in df.columns if col != 'lag']
-    df[cols] = df[cols].fillna(df.mean())
-    return df
-
-
 def fill_missing_by_last(df):
     """Fill Missing by last value (except lag columns)
     """
     cols = [col for col in df.columns if col != 'lag']
     df[cols] = df[cols].fillna(method='ffill')
     return df
+
+
+def split_data(df, percent_holdout=.8):
+    """Split DataFrame into Train/Test by holdout percent.
+
+    Returns: (X_tr, X_val, y_tr, y_val)
+    """
+    cut_point = int(np.ceil(len(df) * percent_holdout))
+    X_train, X_val = df.drop('total_cases', 1).iloc[0:cut_point], df.drop('total_cases', 1).iloc[cut_point:,:]
+    y_train, y_val = df['total_cases'][0:cut_point], df['total_cases'][cut_point:]
+
+    return X_train, X_val, y_train, y_val
 
 
 def add_lags(df, var='total_cases', lags=10):

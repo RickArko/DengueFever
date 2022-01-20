@@ -127,4 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# remove plots/artifacts that should be generated rather than committed to repo
 *.html
+*png

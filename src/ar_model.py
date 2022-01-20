@@ -15,20 +15,10 @@ from sklearn.metrics import r2_score
 from metrics import sMAPE, rmse
 
 # Custom Feature Processing
-from process import load_data, fill_missing_by_last
+from process import load_data, fill_missing_by_last, split_data
 
 # Endogenous VAR/ARIMAX/SARIMAX
 # from statsmodels.tsa.api import VAR
-
-
-def split_data(df, percent_holdout=.8):
-    """Return (X_tr, X_val, y_tr, y_val)
-    """
-    cut_point = int(np.ceil(len(df) * percent_holdout))
-    X_train, X_val = df.drop('total_cases', 1).iloc[0:cut_point], df.drop('total_cases', 1).iloc[cut_point:,:]
-    y_train, y_val = df['total_cases'][0:cut_point], df['total_cases'][cut_point:]
-
-    return X_train, X_val, y_train, y_val
 
 
 def plotly_train_test(y_train, y_val, title: str, save=False):
@@ -71,7 +61,7 @@ def tune_ar(y_train, y_val, lags=300):
     return dfr
 
 
-def train_and_view_ar(y_train, y_val, lags, trend='n', save=False, title=None):
+def train_and_view_ar(y_train, y_val, lags, trend='n', save=False, title=None, verbose=False):
     """Train AutoRegression with specified Lags and view results
     """
     model_ar = AutoReg(y_train, lags, trend=trend).fit(cov_type='HC0')
@@ -84,6 +74,10 @@ def train_and_view_ar(y_train, y_val, lags, trend='n', save=False, title=None):
     f = px.line(dfres, x=dfres.index, y='total_cases', color='Prediction')
     f.update_layout(title=f'AR Model with {lags} lags (Predicted vs. Actual)')
     f.show()
+
+    if verbose:
+        print(model_ar.summary())
+
     if save:
         if title:
             title = f"ARModel_{title}.html"

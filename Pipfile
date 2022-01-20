@@ -12,6 +12,7 @@ pandas-profiling = "*"
 statsmodels = "*"
 sklearn = "*"
 pmdarima = "*"
+jupyter = "*"
 
 [requires]
 python_version = "3.9"
