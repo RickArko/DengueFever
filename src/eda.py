@@ -29,7 +29,7 @@ def plotly_correlation(df, save=False, title=None):
     fig = px.imshow(df.corr())
     fig.update_layout(title=title)
     if save:
-        fig.write_html(Path("eda").joinpath(f"{title}.html"))
+        fig.write_html(f"eda\{title.replace(' ', '').replace(':', '_')}.html")
     fig.show()
 
 
@@ -41,6 +41,10 @@ if __name__ == '__main__':
     profile = ProfileReport(dfin, title="Pandas Profiling Report", explorative=True)
     profile.to_file(Path("eda").joinpath("raw_dengue_eda.html"))
     plotly_variable_by_city(dfin, 'total_cases', save=True)
+
+    for city, dfcity in dfin.groupby('city'):
+        dfcity = dfcity.fillna(method='ffill').drop(['year', 'weekofyear'], 1)
+        plotly_correlation(dfcity, title=f'{city}', save=True)
 
     for city, dfcity in dfin.groupby('city'):
         print(f'Begin City Specific EDA:\n{city} with shape: {dfcity.shape}')

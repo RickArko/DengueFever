@@ -18,9 +18,9 @@ Results saved in `src/eda`
 ```
 
 # Baseline model (Simple AutoRegression)
-Results saved in `src/models`
+Results saved in `src/ar_models`
 ```cd src
-    python model.py
+    python ar_model.py
 ```
 
 
