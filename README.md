@@ -1,20 +1,26 @@
 # DengueFever
-Forecast Dengue Fever in San Juan and Iquitos.
+Forecast total cases of Dengue Fever in the cities of San Juan and Iquitos.
 
-# Installation/Configuration
-Need some version of `Python3.9` in `$PythonPath` then use `pipenv` to install dependencies:
-```
-    $PythonPath\python.exe -m pip install pipenv
-    set PIPENV_VENV_IN_PROJECT="enabled"
-    pipenv install
-```
+---
 
+##  Checklist:
+1. EDA\Visualizations
+2. Analysis of Covariate Relation to Target
+3. Documentation, Observations, Statistical Tests
+4. Forecast Model
+
+----
 
 # Exploratory Data Analysis
-```
-    pipenv shell
-    cd src
+Results saved in `src/eda`
+```cd src
     python eda.py
+```
+
+# Baseline model (Simple AutoRegression)
+Results saved in `src/models`
+```cd src
+    python model.py
 ```
 
 
@@ -49,3 +55,12 @@ Need some version of `Python3.9` in `$PythonPath` then use `pipenv` to install d
                 - forecasts will be required for each co-variate, so it's important to establish a baseline and demonstrate meaningfull improvement
 
 
+# Installation/Configuration
+Need some version of `Python3.9` in `$PythonPath` then use `pipenv` to install dependencies:
+```
+    $PythonPath\python.exe -m pip install pipenv
+    set PIPENV_VENV_IN_PROJECT="enabled"
+    pipenv install
+    pipenv shell
+    cd src
+```
