@@ -17,6 +17,8 @@ from metrics import sMAPE, rmse
 # Custom Feature Processing
 from process import load_data, fill_missing_by_last, split_data
 
+from plotting import plotly_forecast
+
 # Endogenous VAR/ARIMAX/SARIMAX
 # from statsmodels.tsa.api import VAR
 
@@ -134,9 +136,19 @@ if __name__ == '__main__':
         train_and_view_ar(y_train, y_val, optimal_ar_smape, save=True, title=F"Best_sMAPE_{city}")          # select this slightly more straight-forward
 
 
+        model_ar = AutoReg(y_train, optimal_ar, trend='n').fit(cov_type='HC0')
+        pred = model_ar.predict(start=len(y_train), end=len(y_train) + len(y_val) - 1)
+        fc = plotly_forecast(y_train, y_val, pred, title=f'Forcecast {city}')
+        fc.write_html(f'ar_models/ARForecast_{city}.html')
+
     ### Simple AR model captures a good bit of the non-epidemic trend, but severely underpredicts during epidemic tops
+    ### SJ:
+        ### June 12, 2005 - Dec, 11 2005
+        ### May 20, 2007 - Dec, 1 2007
+        ### smells like el nino
 
-    ### June 12, 2005 - Dec, 11 2005
-    ### May 20, 2007 - Dec, 1 2007
+    ### IQ:
+        ### Sep, 2008 - Dec, 2008
+        ### Jan 2009 - Mar, 2009
+        ### Dec 2009 - May, 2010
 
-    ### smells like el nino

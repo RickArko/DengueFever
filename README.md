@@ -17,6 +17,12 @@ Results saved in `src/eda`
     python eda.py
 ```
 
+# Jupyter
+```cd src
+    python -m ipykernel install --user --name=venv-azureml-37
+    jupyter notebook
+```
+
 # Baseline model (Simple AutoRegression)
 Results saved in `src/ar_models`
 ```cd src

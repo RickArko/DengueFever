@@ -61,6 +61,8 @@ def split_data(df, percent_holdout=.8):
     X_train, X_val = df.drop('total_cases', 1).iloc[0:cut_point], df.drop('total_cases', 1).iloc[cut_point:,:]
     y_train, y_val = df['total_cases'][0:cut_point], df['total_cases'][cut_point:]
 
+    assert X_train.shape[0] == y_train.shape[0]
+    assert X_val.shape[0] == y_val.shape[0]
     return X_train, X_val, y_train, y_val
 
 
