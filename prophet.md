@@ -5,11 +5,13 @@ After a failed installation it seems **Python < 3.9** is required unfortunately 
 Not ideal, but I'll quickly set-up a conda environment to test this model.
 
 
+***Important** should work with 3.8, but I recommend `python=3.7.9` (to avoid fbprophet issues)
 ```
     conda create -n dengue python=3.7.9
-    conda install -c conda-forge prophet seaborn sckit-learn
-    conda install jupyter ipykernel plotly
+    conda env update -f prophetenv.yml
 
+	# possibly required to make jupyter recognize conda environment
+    conda install jupyter ipykernel
 ```
 
 

@@ -1,23 +1,18 @@
 from audioop import rms
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
-from pathlib import Path
-from tqdm import tqdm
-
-# statsmodels
 import statsmodels.api as sm
+from sklearn.metrics import r2_score
 from statsmodels.tsa.ar_model import AutoReg
 from statsmodels.tsa.stattools import adfuller
+from tqdm import tqdm
 
-# Error metrics
-from sklearn.metrics import r2_score
-from metrics import sMAPE, rmse
-
-# Custom Feature Processing
-from process import load_data, fill_missing_by_last, split_data
-
+from metrics import rmse, sMAPE
 from plotting import plotly_forecast
+from process import fill_missing_by_last, load_data, split_data
 
 # Endogenous VAR/ARIMAX/SARIMAX
 # from statsmodels.tsa.api import VAR
@@ -126,7 +121,7 @@ if __name__ == '__main__':
         # Choose AR to max MAE/RMSE
         optimal_ar = int(dfresults.loc[np.argmin(dfresults.MAD)]['AR_periods'])
         optimal_ar_rmse = int(dfresults.loc[np.argmin(dfresults.RMSE)]['AR_periods'])
-        optimal_ar_r2 = int(dfresults.loc[np.argmin(dfresults['R-square'])]['AR_periods'])
+        optimal_ar_r2 = int(dfresults.loc[np.argmax(dfresults['R-square'])]['AR_periods'])
         optimal_ar_smape = int(dfresults.loc[np.argmin(dfresults['sMAPE'])]['AR_periods'])
 
 

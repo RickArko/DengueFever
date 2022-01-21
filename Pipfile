@@ -13,6 +13,7 @@ statsmodels = "*"
 sklearn = "*"
 pmdarima = "*"
 jupyter = "*"
+flake8 = "*"
 
 [requires]
 python_version = "3.9"
